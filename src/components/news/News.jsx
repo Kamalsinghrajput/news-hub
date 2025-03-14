@@ -22,17 +22,22 @@ const News = ({ preferences }) => {
     };
   }, [preferences]);
 
+  useEffect(() => {
+    if (articles.length > 0 && articles.length <= 5) {
+      setLoading(false);
+    }
+  }, [articles]);
+
   const baseUrl = API_BASE_URL;
 
   const fetchNews = async (category, signal) => {
-    if (articles.length > 0) {
-      setLoading(false);
-    }
-
     try {
-      const response = await fetch(`${baseUrl}/get-news?category=${category}`, {
-        signal,
-      });
+      const response = await fetch(
+        `${baseUrl}/get-news?category=${category.toLowerCase()}`,
+        {
+          signal,
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

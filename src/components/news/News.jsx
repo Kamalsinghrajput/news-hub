@@ -63,6 +63,25 @@ const News = ({ preferences }) => {
 
   return (
     <div className="col-span-9">
+      {preferences && (
+        <div className="text-white">
+          <h1 className="text-2xl font-bold my-4">
+            As per your selected preferences...
+          </h1>
+          <div className="flex items-center gap-4 mb-4 flex-wrap">
+            {preferences.map((item, key) => {
+              return (
+                <div
+                  className="flex items-center rounded-[8px] px-4 py-2 bg-white text-black"
+                  key={key}
+                >
+                  {`${item.charAt(0).toUpperCase()}${item.slice(1)}`}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       <div className="space-y-6">
         {articles?.map((article, index) => (
           <NewsCard {...article} sentiment={article.text} key={index} />

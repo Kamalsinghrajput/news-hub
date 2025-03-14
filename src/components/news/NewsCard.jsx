@@ -5,16 +5,25 @@ import {
   TrendingUp,
   TrendingDown,
   Minus,
+  Meh,
 } from "lucide-react";
-const NewsCard = ({ title, id, image, description, isRead, isSaved }) => {
+const NewsCard = ({
+  title,
+  id,
+  image,
+  description,
+  isRead,
+  isSaved,
+  sentiment,
+}) => {
   const getSentimentIcon = (sentiment) => {
     switch (sentiment) {
-      case "positive":
+      case "Positive":
         return <TrendingUp className="text-green-500" size={18} />;
-      case "negative":
+      case "Negative":
         return <TrendingDown className="text-red-500" size={18} />;
-      default:
-        return <Minus className="text-gray-500" size={18} />;
+      case "Neutral":
+        return <Meh className="text-gray-500" size={18} />;
     }
   };
 
@@ -31,9 +40,9 @@ const NewsCard = ({ title, id, image, description, isRead, isSaved }) => {
         <div className="flex-1 p-6">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center space-x-1 px-3 py-1 bg-gray-50 dark:bg-gray-700/50 rounded-full">
-              {getSentimentIcon("positive")}
+              {getSentimentIcon(sentiment)}
               <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-                {"positive".charAt(0).toUpperCase() + "positive".slice(1)}
+                {sentiment.charAt(0).toUpperCase() + "positive".slice(1)}
               </span>
             </div>
           </div>

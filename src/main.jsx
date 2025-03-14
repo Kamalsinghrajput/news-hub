@@ -8,9 +8,9 @@ import { NhostProvider } from "@nhost/react";
 import { nhost } from "./lib/nhost.js";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <NhostProvider nhost={nhost}>
-      <App />
-    </NhostProvider>
-  </StrictMode>
+  // <StrictMode>
+  <NhostProvider nhost={nhost}>
+    <App />
+  </NhostProvider>
+  // </StrictMode>
 );

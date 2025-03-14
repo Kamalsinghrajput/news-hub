@@ -24,6 +24,8 @@ const NewsCard = ({
         return <TrendingDown className="text-red-500" size={18} />;
       case "Neutral":
         return <Meh className="text-gray-500" size={18} />;
+      default:
+        return null;
     }
   };
 
@@ -42,7 +44,7 @@ const NewsCard = ({
             <div className="flex items-center space-x-1 px-3 py-1 bg-gray-50 dark:bg-gray-700/50 rounded-full">
               {getSentimentIcon(sentiment)}
               <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-                {sentiment.charAt(0).toUpperCase() + "positive".slice(1)}
+                {sentiment?.charAt(0).toUpperCase() + sentiment?.slice(1)}
               </span>
             </div>
           </div>

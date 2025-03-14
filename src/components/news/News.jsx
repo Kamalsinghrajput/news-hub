@@ -30,7 +30,6 @@ const News = () => {
       
       const data = await response.json();
       setArticles(data);
-      console.log(data);
     } catch (error) {
       console.error("Error fetching news:", error);
     } finally {

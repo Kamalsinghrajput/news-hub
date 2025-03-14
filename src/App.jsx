@@ -3,14 +3,33 @@ import News from "./components/news/News";
 import Preferences from "./components/preference/Preferences.jsx";
 import SignIn from "./components/Authentication/sign_in/SignIn.jsx";
 import { useAuthenticationStatus } from "@nhost/react";
+import {useEffect, useState} from "react";
+
+import { useUserId } from "@nhost/react";
 
 function App() {
+  const userId = useUserId(); // Gets the authenticated user's ID
   
   const { isAuthenticated } = useAuthenticationStatus();
+  const [userPreferences, setUserPreferences] = useState({});
   
+  useEffect(() => {
+    async function getUserPreferences() {
+      const response = await fetch(`${import.meta.env.VITE_APP_NEWS_URL}?userId=${userId}`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const responseJson = await response.json();
+      setUserPreferences(responseJson[0]);
+    }
+    getUserPreferences();
+  }, [])
+  console.log("userPreferences: ",userPreferences);
   return (<>
-    <Navbar/>
-    {/*<Preferences loggedIn={loggedIn}/>*/}
+    <Navbar isAuthenticated={isAuthenticated}/>
+    {isAuthenticated && <Preferences/>}
     <div className={"min-h-screen transition-colors duration-200"}>
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className=" gap-8">

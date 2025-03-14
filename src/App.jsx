@@ -40,9 +40,18 @@ function App() {
 
   return (
     <>
-      <Navbar isAuthenticated={isAuthenticated} />
+      <Navbar
+        isAuthenticated={isAuthenticated}
+        userPreferences={userPreferences}
+        userId={userId}
+        setUserPreferences={setUserPreferences}
+      />
       {isAuthenticated && userPreferences.length === 0 && (
-        <Preferences userPreferences={userPreferences} userId={userId} />
+        <Preferences
+          userPreferences={userPreferences}
+          userId={userId}
+          setUserPreferences={setUserPreferences}
+        />
       )}
       <div className={"min-h-screen transition-colors duration-200"}>
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

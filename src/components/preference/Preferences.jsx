@@ -8,6 +8,7 @@ import {
   Globe,
   Flag,
   Biohazard,
+  Loader2,
 } from "lucide-react";
 import { useState } from "react";
 import { API_BASE_URL } from "../../constants/constants";
@@ -36,8 +37,11 @@ const categoryIcons = {
   Health: Heart,
 };
 
-const Preferences = ({ userId }) => {
-  const [selectedPreferences, setSelectedPreferences] = useState([]);
+const Preferences = ({ userId, userPreferences, setUserPreferences }) => {
+  const [selectedPreferences, setSelectedPreferences] = useState(
+    userPreferences || []
+  );
+
   const [isLoading, setIsLoading] = useState(false);
 
   const togglePreference = (category) => {
@@ -51,10 +55,12 @@ const Preferences = ({ userId }) => {
   const savePreferences = async () => {
     try {
       setIsLoading(true);
+      setUserPreferences(selectedPreferences);
       await fetch(`${API_BASE_URL}/store-user-preferences?userId=${userId}`, {
         method: "POST",
         body: JSON.stringify(selectedPreferences),
       });
+      window.location.reload("/");
     } catch (error) {
       console.log(error);
     } finally {
@@ -104,9 +110,9 @@ const Preferences = ({ userId }) => {
             ? selectedPreferences.join(", ")
             : "None"}
         </div>
-        <div className="flex items-center justify-center mt-8">
+        <div className="flex items-center justify-center mt-8 ">
           <button
-            className="bg-white rounded-[8px] p-3 "
+            className="bg-white rounded-[8px] p-3 cursor-pointer"
             onClick={savePreferences}
           >
             {isLoading ? (

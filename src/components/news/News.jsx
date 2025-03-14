@@ -49,7 +49,6 @@ const News = ({ preferences }) => {
   // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const fetchNewsAsPreference = async (signal) => {
-    console.log(preferences);
     setLoading(true);
 
     for (const category of preferences) {

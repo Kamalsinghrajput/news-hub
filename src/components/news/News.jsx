@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 import Loader from "../utils/loader/Loader.jsx";
 import { API_BASE_URL } from "../../constants/constants.js";
 
-const News = ({ preferences }) => {
+const News = ({ setIsLoading, preferences }) => {
   const [articles, setArticles] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -26,11 +25,12 @@ const News = ({ preferences }) => {
 
   const fetchNews = async (category, signal) => {
     if (articles.length > 0) {
-      setLoading(false);
+      setIsLoading(false);
     }
 
     try {
-      const response = await fetch(`${baseUrl}/get-news?category=${category}`, {
+      setIsLoading(true);
+      const response = await fetch(`${baseUrl}/get-news-from-db?category=${category}`, {
         signal,
       });
 
@@ -41,7 +41,9 @@ const News = ({ preferences }) => {
       const data = await response.json();
       setArticles((prevArticles) => [...prevArticles, ...data]);
     } catch (error) {
-      console.error(`Error fetching news for category ${category}:`, error);
+      if (error.name !== 'AbortError') {
+        console.error(`Error fetching news for category ${category}:`, error);
+      }
     }
   };
 
@@ -49,17 +51,11 @@ const News = ({ preferences }) => {
   // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const fetchNewsAsPreference = async (signal) => {
-    setLoading(true);
-
     for (const category of preferences) {
       await fetchNews(category, signal);
       // await delay(500); // Wait 500ms before next request
     }
-
-    setLoading(false);
   };
-
-  if (loading) return <Loader />;
 
   return (
     <div className="col-span-9">

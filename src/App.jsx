@@ -11,21 +11,29 @@ import Loader from "./components/utils/loader/Loader.jsx";
 function App() {
   const userId = useUserId(); // Gets the authenticated user's ID
 
-  const { isAuthenticated, isLoading } = useAuthenticationStatus();
+  const { isAuthenticated, isLoading: authLoading } = useAuthenticationStatus();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [userPreferences, setUserPreferences] = useState([]);
 
   async function getUserPreferences() {
-    const response = await fetch(
-      `${API_BASE_URL}/get-preferences?userId=${userId}`
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        `${API_BASE_URL}/get-preferences?userId=${userId}`
+      );
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const responseJson = await response.json();
+      setUserPreferences(responseJson[0].category);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
     }
-
-    const responseJson = await response.json();
-    setUserPreferences(responseJson[0].category);
   }
 
   useEffect(() => {
@@ -34,7 +42,7 @@ function App() {
     }
   }, [isAuthenticated]);
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return <Loader />;
   }
 
@@ -46,7 +54,7 @@ function App() {
         userId={userId}
         setUserPreferences={setUserPreferences}
       />
-      {isAuthenticated && userPreferences.length === 0 && (
+      {isAuthenticated && userPreferences.length === 0 && !isLoading && (
         <Preferences
           userPreferences={userPreferences}
           userId={userId}
@@ -56,7 +64,7 @@ function App() {
       <div className={"min-h-screen transition-colors duration-200"}>
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className=" gap-8">
-            {isAuthenticated ? <News preferences={["general"]} /> : <SignIn />}
+            {isAuthenticated ? <News setIsLoading={setIsLoading} preferences={["general"]} /> : <SignIn />}
           </div>
         </main>
       </div>

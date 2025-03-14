@@ -1,16 +1,15 @@
 import "./loader.styles.css";
+
 const Loader = () => {
   return (
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-45">
-      <div className="loader">
-        <div className="loader-square"></div>
-        <div className="loader-square"></div>
-        <div className="loader-square"></div>
-        <div className="loader-square"></div>
-        <div className="loader-square"></div>
-        <div className="loader-square"></div>
-        <div className="loader-square"></div>
-      </div>
+    <div className="loader absolute left-1/2 top-1/2 -translate-x-[48px] -translate-y-[48px] rotate-45">
+      <div className="loader-square"></div>
+      <div className="loader-square"></div>
+      <div className="loader-square"></div>
+      <div className="loader-square"></div>
+      <div className="loader-square"></div>
+      <div className="loader-square"></div>
+      <div className="loader-square"></div>
     </div>
   );
 };

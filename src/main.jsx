@@ -12,8 +12,5 @@ createRoot(document.getElementById("root")).render(
     <NhostProvider nhost={nhost}>
       <App />
     </NhostProvider>
-
-    <Navbar />
-    <Preferences />
   </StrictMode>
 );

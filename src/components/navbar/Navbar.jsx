@@ -1,6 +1,11 @@
 import { Newspaper, Settings, LogOut, Save } from "lucide-react";
+import { useSignOut } from "@nhost/react";
 
 const Navbar = () => {
+  const { signOut } = useSignOut();
+  const handleLogout = async () => {
+    await signOut();
+  };
   return (
     <header className="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-800 dark:to-primary-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -22,7 +27,7 @@ const Navbar = () => {
               <Settings size={20} className="text-white" />
               <span className="text-white text-sm font-medium">Setting</span>
             </button>
-            <button className="ml-2 flex items-center space-x-2 bg-blackrounded-full px-4 py-2 transition-colors duration-200 ">
+            <button className="ml-2 flex items-center space-x-2 bg-blackrounded-full px-4 py-2 transition-colors duration-200 cursor-pointer" onClick={handleLogout}>
               <LogOut size={20} className="text-white" />
               <span className="text-white text-sm font-medium">Logout</span>
             </button>

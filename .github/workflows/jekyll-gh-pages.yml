@@ -27,6 +27,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    env:
+      VITE_APP_NHOST_SUBDOMAIN: ${{ secrets.VITE_APP_NHOST_SUBDOMAIN }}
+      VITE_APP_NHOST_REGION: ${{ secrets.VITE_APP_NHOST_REGION }}
+      VITE_APP_API_BASE_URL: ${{secrets.VITE_APP_API_BASE_URL}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

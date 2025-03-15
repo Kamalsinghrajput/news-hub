@@ -94,7 +94,7 @@ const News = ({
         {articles?.map((article) => (
           <NewsCard
             {...article}
-            sentiment={article.text}
+            sentiment={article.sentiment}
             key={article.id}
             userId={userId}
           />

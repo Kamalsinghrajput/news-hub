@@ -1,18 +1,18 @@
 import {
   BookmarkPlus,
   Share2,
-  CheckCircle,
   TrendingUp,
   TrendingDown,
-  Minus,
   Meh,
 } from "lucide-react";
+import { MarkAsRead } from "../utils/MarkAsRead/MarkAsRead";
+
 const NewsCard = ({
   title,
   id,
   image,
   description,
-  isRead,
+  userId,
   isSaved,
   sentiment,
 }) => {
@@ -31,7 +31,7 @@ const NewsCard = ({
 
   return (
     <article
-      key={id}
+      id={id}
       className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transform hover:scale-[1.02] transition-transform duration-200"
     >
       <div className="flex">
@@ -55,18 +55,7 @@ const NewsCard = ({
             {description}
           </p>
           <div className="flex items-center space-x-4">
-            <button
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors duration-200 ${
-                isRead
-                  ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400"
-                  : "bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`}
-            >
-              <CheckCircle size={18} />
-              <span className="text-sm font-medium">
-                {isRead ? "Read" : "Mark as read"}
-              </span>
-            </button>
+            <MarkAsRead articleId={id} userId={userId} />
             <button
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors duration-200 ${
                 isSaved

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Loader from "../utils/loader/Loader.jsx";
 import { API_BASE_URL } from "../../constants/constants.js";
 
-const News = ({ preferences }) => {
+const News = ({ preferences, userId }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -88,8 +88,13 @@ const News = ({ preferences }) => {
         </div>
       )}
       <div className="space-y-6">
-        {articles?.map((article, index) => (
-          <NewsCard {...article} sentiment={article.text} key={index} />
+        {articles?.map((article) => (
+          <NewsCard
+            {...article}
+            sentiment={article.text}
+            key={article.id}
+            userId={userId}
+          />
         ))}
       </div>
     </div>

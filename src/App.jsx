@@ -57,7 +57,7 @@ function App() {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className=" gap-8">
             {isAuthenticated ? (
-              <News preferences={userPreferences} />
+              <News preferences={userPreferences} userId={userId} />
             ) : (
               <SignIn />
             )}

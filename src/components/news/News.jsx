@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import Loader from "../utils/loader/Loader.jsx";
 import { API_BASE_URL } from "../../constants/constants.js";
 
-const News = ({ preferences, userId }) => {
-  const [articles, setArticles] = useState([]);
+const News = ({ preferences, userId, setArticles, articles }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
+
+    if (articles.length > 0) return;
 
     if (preferences.length > 0) {
       fetchNewsAsPreference(signal);

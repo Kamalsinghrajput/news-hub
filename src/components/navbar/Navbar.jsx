@@ -8,6 +8,7 @@ const Navbar = ({
   userPreferences,
   userId,
   setUserPreferences,
+  toggleSavedArticles,
 }) => {
   const { signOut } = useSignOut();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -25,7 +26,10 @@ const Navbar = ({
       <header className="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-primary-800 dark:to-primary-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
+            <div
+              className="flex items-center space-x-3 cursor-pointer"
+              onClick={toggleSavedArticles}
+            >
               <div className="bg-black p-2 rounded-lg backdrop-blur-sm">
                 <Newspaper className="text-white" size={28} />
               </div>
@@ -34,12 +38,17 @@ const Navbar = ({
               </h1>
             </div>
             <div className="flex items-center space-x-2">
-              <button className="ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200">
+              <button
+                onClick={toggleSavedArticles}
+                className="cursor-pointer ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200"
+              >
                 <Save size={20} className="text-white" />
-                <span className="text-white text-sm font-medium">Saved</span>
+                <span className="text-white text-sm font-medium">
+                  Saved Articles
+                </span>
               </button>
               <button
-                className="ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200"
+                className="cursor-pointer ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200"
                 onClick={() => setIsSettingsOpen(true)}
               >
                 <Settings size={20} className="text-white" />
@@ -47,7 +56,7 @@ const Navbar = ({
               </button>
               {isAuthenticated && (
                 <button
-                  className="ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200 cursor-pointer"
+                  className="cursor-pointer ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200 cursor-pointer"
                   onClick={handleLogout}
                 >
                   <LogOut size={20} className="text-white" />

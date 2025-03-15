@@ -1,40 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { CheckCircle, Loader2 } from "lucide-react";
+import { Bookmark, Loader2 } from "lucide-react";
 import { API_BASE_URL } from "../../../constants/constants";
 
-export const MarkAsRead = ({ userId, articleId }) => {
-  const [isRead, setIsRead] = useState(false);
+export const MarkAsSaved = ({ userId, articleId }) => {
+  const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const checkIfRead = async () => {
+  const checkIfSaved = async () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${API_BASE_URL}/article-is-read?userId=${userId}&articleId=${articleId} `
+        `${API_BASE_URL}/article-is-saved?userId=${userId}&articleId=${articleId}`
       );
       const data = await response.json();
 
       //TODO: clean mess up from n8n
-      const isRead = data?.["true"]?.[0].exists || data[0].exists;
-
-      setIsRead(isRead);
+      const isSaved = data?.["true"]?.[0].exists || data[0].exists;
+      setIsSaved(isSaved);
     } catch (error) {
-      console.error("Error checking read status:", error);
+      console.error("Error checking saved status:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    checkIfRead();
+    checkIfSaved();
   }, [userId, articleId]);
 
-  const toggleReadStatus = async () => {
+  const toggleSaveStatus = async () => {
     try {
       setIsLoading(true);
-      const endpoint = isRead ? "/unmark-article-read" : "/mark-article-read";
-      const method = isRead ? "DELETE" : "POST";
-      console.log(method);
+      const endpoint = isSaved
+        ? "/unmark-article-saved"
+        : "/mark-article-saved";
+      const method = isSaved ? "DELETE" : "POST";
+
       await fetch(
         `${API_BASE_URL}${endpoint}?userId=${userId}&articleId=${articleId}`,
         {
@@ -43,10 +44,10 @@ export const MarkAsRead = ({ userId, articleId }) => {
         }
       );
 
-      setIsRead((prev) => !prev);
+      setIsSaved((prev) => !prev);
     } catch (error) {
       console.error(
-        `Error ${isRead ? "unmarking" : "marking"} article as read:`,
+        `Error ${isSaved ? "unmarking" : "marking"} article as saved:`,
         error
       );
     } finally {
@@ -56,10 +57,10 @@ export const MarkAsRead = ({ userId, articleId }) => {
 
   return (
     <button
-      onClick={toggleReadStatus}
+      onClick={toggleSaveStatus}
       className={`cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors duration-200 ${
-        isRead
-          ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400"
+        isSaved
+          ? "bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
           : "bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
       }`}
     >
@@ -67,9 +68,9 @@ export const MarkAsRead = ({ userId, articleId }) => {
         <Loader2 className="animate-spin" />
       ) : (
         <>
-          <CheckCircle size={18} />
+          <Bookmark size={18} />
           <span className="text-sm font-medium">
-            {isRead ? "Read" : "Mark as read"}
+            {isSaved ? "Saved" : "Save Article"}
           </span>
         </>
       )}

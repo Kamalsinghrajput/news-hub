@@ -6,16 +6,10 @@ import {
   Meh,
 } from "lucide-react";
 import { MarkAsRead } from "../utils/MarkAsRead/MarkAsRead";
+import { MarkAsSaved } from "../utils/MarkAsSaved/MarkAsSaved";
+import ShareButton from "../utils/ShareButton/ShareButton";
 
-const NewsCard = ({
-  title,
-  id,
-  image,
-  description,
-  userId,
-  isSaved,
-  sentiment,
-}) => {
+const NewsCard = ({ title, image, description, userId, sentiment, url }) => {
   const getSentimentIcon = (sentiment) => {
     switch (sentiment) {
       case "Positive":
@@ -31,7 +25,7 @@ const NewsCard = ({
 
   return (
     <article
-      id={id}
+      id={url}
       className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden transform hover:scale-[1.02] transition-transform duration-200"
     >
       <div className="flex">
@@ -55,23 +49,9 @@ const NewsCard = ({
             {description}
           </p>
           <div className="flex items-center space-x-4">
-            <MarkAsRead articleId={id} userId={userId} />
-            <button
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors duration-200 ${
-                isSaved
-                  ? "bg-primary-100 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400"
-                  : "bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`}
-            >
-              <BookmarkPlus size={18} />
-              <span className="text-sm font-medium">
-                {isSaved ? "Saved" : "Save"}
-              </span>
-            </button>
-            <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200">
-              <Share2 size={18} />
-              <span className="text-sm font-medium">Share</span>
-            </button>
+            <MarkAsRead articleId={url} userId={userId} />
+            <MarkAsSaved articleId={url} userId={userId} />
+            <ShareButton url={url} />
           </div>
         </div>
       </div>

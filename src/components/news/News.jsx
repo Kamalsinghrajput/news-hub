@@ -17,10 +17,6 @@ const News = ({ preferences, userId, setArticles, articles }) => {
     } else {
       fetchNews("general", signal);
     }
-
-    return () => {
-      controller.abort();
-    };
   }, [preferences]);
 
   useEffect(() => {
@@ -54,11 +50,11 @@ const News = ({ preferences, userId, setArticles, articles }) => {
   // Helper function to add delay
   // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const fetchNewsAsPreference = async (signal) => {
+  const fetchNewsAsPreference = async () => {
     setLoading(true);
 
     for (const category of preferences) {
-      await fetchNews(category, signal);
+      await fetchNews(category);
       // await delay(500); // Wait 500ms before next request
     }
 

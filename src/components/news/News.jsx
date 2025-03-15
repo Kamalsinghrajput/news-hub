@@ -1,27 +1,28 @@
 import NewsCard from "./NewsCard";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Loader from "../utils/loader/Loader.jsx";
 import { API_BASE_URL } from "../../constants/constants.js";
 
-const News = ({ preferences, userId, setArticles, articles }) => {
-  const [loading, setLoading] = useState(true);
-
+const News = ({
+  preferences,
+  userId,
+  setArticles,
+  articles,
+  setAppLoading,
+  appLoading,
+}) => {
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
 
     if (articles.length > 0) return;
 
-    if (preferences.length > 0) {
-      fetchNewsAsPreference(signal);
-    } else {
-      fetchNews("general", signal);
-    }
+    fetchNewsAsPreference(signal);
   }, [preferences]);
 
   useEffect(() => {
     if (articles.length > 0 && articles.length <= 5) {
-      setLoading(false);
+      setAppLoading(false);
     }
   }, [articles]);
 
@@ -48,20 +49,25 @@ const News = ({ preferences, userId, setArticles, articles }) => {
   };
 
   // Helper function to add delay
-  // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const fetchNewsAsPreference = async () => {
-    setLoading(true);
+    setAppLoading(true);
+    let loaderTurnedOff = false;
 
     for (const category of preferences) {
       await fetchNews(category);
-      // await delay(500); // Wait 500ms before next request
+      if (!loaderTurnedOff) {
+        setAppLoading(false);
+        loaderTurnedOff = true;
+      }
+      await delay(500); // Wait 500ms before next request
     }
 
-    setLoading(false);
+    setAppLoading(false);
   };
 
-  if (loading) return <Loader />;
+  if (appLoading) return <Loader />;
 
   return (
     <div className="col-span-9">

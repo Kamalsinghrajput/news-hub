@@ -15,7 +15,7 @@ function App() {
   const userId = useUserId();
 
   const { isAuthenticated, isLoading } = useAuthenticationStatus();
-
+  const [appLoading, setAppLoading] = useState(false);
   const [userPreferences, setUserPreferences] = useState([]);
   const [showSavedArticles, setShowSavedArticles] = useState(false);
 
@@ -41,7 +41,7 @@ function App() {
     }
   }, [isAuthenticated]);
 
-  if (isLoading) {
+  if (isLoading || appLoading) {
     return <Loader />;
   }
 
@@ -80,6 +80,8 @@ function App() {
                   userId={userId}
                   setArticles={setArticles}
                   articles={articles}
+                  setAppLoading={setAppLoading}
+                  appLoading={appLoading}
                 />
               )
             ) : (

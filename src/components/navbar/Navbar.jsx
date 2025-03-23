@@ -2,6 +2,7 @@ import { Newspaper, Settings, LogOut, Save, X } from "lucide-react";
 import { useSignOut } from "@nhost/react";
 import { useState } from "react";
 import Preferences from "../preference/Preferences";
+import { Navigate } from "react-router-dom";
 
 const Navbar = ({
   isAuthenticated,
@@ -9,6 +10,8 @@ const Navbar = ({
   userId,
   setUserPreferences,
   toggleSavedArticles,
+  isAuthLoading,
+  appLoading,
 }) => {
   const { signOut } = useSignOut();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -20,6 +23,14 @@ const Navbar = ({
   const handleCloseSettings = () => {
     setIsSettingsOpen(false);
   };
+
+  if (!isAuthLoading && !isAuthenticated) {
+    return <Navigate to="/register" replace />;
+  }
+
+  if (isAuthenticated && appLoading && userPreferences.length === 0) {
+    return <Navigate to="/preferences" />;
+  }
 
   return (
     <>
@@ -56,7 +67,7 @@ const Navbar = ({
               </button>
               {isAuthenticated && (
                 <button
-                  className="cursor-pointer ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200 cursor-pointer"
+                  className="ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200 cursor-pointer"
                   onClick={handleLogout}
                 >
                   <LogOut size={20} className="text-white" />

@@ -42,6 +42,7 @@ const News = ({
       }
 
       const data = await response.json();
+
       setArticles((prevArticles) => [...prevArticles, ...data]);
     } catch (error) {
       console.error(`Error fetching news for category ${category}:`, error);
@@ -54,7 +55,12 @@ const News = ({
   const fetchNewsAsPreference = async () => {
     setAppLoading(true);
     let loaderTurnedOff = false;
+    console.log(preferences);
 
+    if (!preferences) {
+      setAppLoading(false);
+      return;
+    }
     for (const category of preferences) {
       await fetchNews(category);
       if (!loaderTurnedOff) {

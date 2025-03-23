@@ -37,12 +37,15 @@ const categoryIcons = {
   Health: Heart,
 };
 
-const Preferences = ({ userId, userPreferences, setUserPreferences }) => {
+const Preferences = ({
+  userId,
+  userPreferences,
+  setUserPreferences,
+  appLoading,
+}) => {
   const [selectedPreferences, setSelectedPreferences] = useState(
     userPreferences || []
   );
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const togglePreference = (category) => {
     setSelectedPreferences((prev) =>
@@ -54,7 +57,6 @@ const Preferences = ({ userId, userPreferences, setUserPreferences }) => {
 
   const savePreferences = async () => {
     try {
-      setIsLoading(true);
       setUserPreferences(selectedPreferences);
       await fetch(`${API_BASE_URL}/store-user-preferences?userId=${userId}`, {
         method: "POST",
@@ -63,8 +65,6 @@ const Preferences = ({ userId, userPreferences, setUserPreferences }) => {
       window.location.reload("/");
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -115,7 +115,7 @@ const Preferences = ({ userId, userPreferences, setUserPreferences }) => {
             className="bg-white rounded-[8px] p-3 cursor-pointer"
             onClick={savePreferences}
           >
-            {isLoading ? (
+            {appLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
             ) : (
               "Save Preferences"

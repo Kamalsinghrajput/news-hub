@@ -1,4 +1,4 @@
-import { Navigate, BrowserRouter as Router } from "react-router-dom";
+import { Navigate, HashRouter as Router } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 
 import { useAuthenticationStatus, useUserId } from "@nhost/react";

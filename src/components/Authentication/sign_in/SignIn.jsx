@@ -1,20 +1,21 @@
 import { useSignInEmailPassword } from "@nhost/react";
 import { useState } from "react";
 import { Mail, Lock, Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function SignIn({ setIsSignUp }) {
   const { signInEmailPassword, isLoading, error } = useSignInEmailPassword();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const handleSignIn = async (e) => {
     e.preventDefault();
     try {
       const response = await signInEmailPassword(email, password);
       if (response) {
-        window.location.replace("/");
+        navigate("/");
+        // window.location.replace("/");
       }
     } catch (error) {
       console.log(error);

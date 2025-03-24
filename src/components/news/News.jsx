@@ -55,7 +55,6 @@ const News = ({
   const fetchNewsAsPreference = async () => {
     setAppLoading(true);
     let loaderTurnedOff = false;
-    console.log(preferences);
 
     if (!preferences) {
       setAppLoading(false);
@@ -101,7 +100,7 @@ const News = ({
           <NewsCard
             {...article}
             sentiment={article.sentiment}
-            key={article.id}
+            key={article.url}
             userId={userId}
           />
         ))}

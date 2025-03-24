@@ -46,7 +46,6 @@ const Preferences = ({
   const [selectedPreferences, setSelectedPreferences] = useState(
     userPreferences || []
   );
-
   const togglePreference = (category) => {
     setSelectedPreferences((prev) =>
       prev.includes(category)

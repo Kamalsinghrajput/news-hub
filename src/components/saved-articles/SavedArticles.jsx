@@ -40,7 +40,7 @@ const SavedArticles = ({ userId }) => {
     <div className="flex flex-col gap-4">
       {articles.length > 0 ? (
         articles.map((article) => (
-          <NewsCard key={article.id} {...article} userId={userId} />
+          <NewsCard key={`saved-${article.url}`} {...article} userId={userId} />
         ))
       ) : (
         <p>No saved articles found.</p>

@@ -2,7 +2,7 @@ import { Newspaper, Settings, LogOut, Save, X } from "lucide-react";
 import { useSignOut } from "@nhost/react";
 import { useState } from "react";
 import Preferences from "../preference/Preferences";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const Navbar = ({
   isAuthenticated,
@@ -44,20 +44,23 @@ const Navbar = ({
               <div className="bg-black p-2 rounded-lg backdrop-blur-sm">
                 <Newspaper className="text-white" size={28} />
               </div>
-              <h1 className="text-2xl font-bold text-white tracking-tight">
+              <Link
+                to={"/"}
+                className="text-2xl font-bold text-white tracking-tight"
+              >
                 NewsHub
-              </h1>
+              </Link>
             </div>
             <div className="flex items-center space-x-2">
-              <button
-                onClick={toggleSavedArticles}
+              <Link
+                to={"/saved-articles"}
                 className="cursor-pointer ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200"
               >
                 <Save size={20} className="text-white" />
                 <span className="text-white text-sm font-medium">
                   Saved Articles
                 </span>
-              </button>
+              </Link>
               <button
                 className="cursor-pointer ml-2 flex items-center space-x-2 bg-black rounded-full px-4 py-2 transition-colors duration-200"
                 onClick={() => setIsSettingsOpen(true)}

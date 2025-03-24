@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import { Register } from "../components/Register/Register";
 
 export const AppRoutes = ({
-  userPreferences,
+  preferences,
   userId,
   setArticles,
   articles,
@@ -20,7 +20,7 @@ export const AppRoutes = ({
         path="/"
         element={
           <News
-            preferences={userPreferences}
+            preferences={preferences}
             userId={userId}
             setArticles={setArticles}
             articles={articles}
@@ -39,7 +39,7 @@ export const AppRoutes = ({
         path="/preferences"
         element={
           <Preferences
-            userPreferences={userPreferences}
+            userPreferences={preferences}
             userId={userId}
             setUserPreferences={setUserPreferences}
             appLoading={appLoading}

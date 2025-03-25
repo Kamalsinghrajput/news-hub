@@ -28,7 +28,7 @@ const Navbar = ({
     return <Navigate to="/register" replace />;
   }
 
-  if (isAuthenticated && appLoading && userPreferences.length === 0) {
+  if (isAuthenticated && !appLoading && userPreferences.length === 0) {
     return <Navigate to="/preferences" />;
   }
 

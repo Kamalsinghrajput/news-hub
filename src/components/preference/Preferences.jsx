@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { API_BASE_URL } from "../../constants/constants";
+import { useNavigate } from "react-router-dom";
 
 const availableCategories = [
   "General",
@@ -46,6 +47,7 @@ const Preferences = ({
   const [selectedPreferences, setSelectedPreferences] = useState(
     userPreferences || []
   );
+  const navigate = useNavigate();
   const togglePreference = (category) => {
     setSelectedPreferences((prev) =>
       prev.includes(category)
@@ -61,7 +63,7 @@ const Preferences = ({
         method: "POST",
         body: JSON.stringify(selectedPreferences),
       });
-      window.location.reload("/");
+      navigate("/");
     } catch (error) {
       console.log(error);
     }

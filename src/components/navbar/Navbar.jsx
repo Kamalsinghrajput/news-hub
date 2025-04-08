@@ -1,20 +1,31 @@
 import { Newspaper, Settings, LogOut, Save, X } from "lucide-react";
-import { useSignOut } from "@nhost/react";
-import { useState } from "react";
+import { useNhostClient, useSignOut } from "@nhost/react";
+import { useEffect, useState } from "react";
 import Preferences from "../preference/Preferences";
 import { Link, Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserPreferences } from "../../store/userPreferencesSlice";
 
 const Navbar = ({
   isAuthenticated,
-  userPreferences,
   userId,
-  setUserPreferences,
   toggleSavedArticles,
   isAuthLoading,
-  appLoading,
 }) => {
+  const nhost = useNhostClient();
+  const user = nhost.auth.getUser();
   const { signOut } = useSignOut();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { preferences, loading } = useSelector(
+    (state) => state.userPreferences
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user && preferences.length === 0) {
+      dispatch(fetchUserPreferences(nhost));
+    }
+  }, [user, dispatch, nhost, preferences.length]);
 
   const handleLogout = async () => {
     await signOut();
@@ -28,7 +39,7 @@ const Navbar = ({
     return <Navigate to="/register" replace />;
   }
 
-  if (isAuthenticated && !appLoading && userPreferences.length === 0) {
+  if (isAuthenticated && !loading && preferences?.length === 0) {
     return <Navigate to="/preferences" />;
   }
 
@@ -91,11 +102,7 @@ const Navbar = ({
           >
             <X size={24} />
           </button>
-          <Preferences
-            userPreferences={userPreferences}
-            userId={userId}
-            setUserPreferences={setUserPreferences}
-          />
+          <Preferences userId={userId} />
         </div>
       )}
     </>

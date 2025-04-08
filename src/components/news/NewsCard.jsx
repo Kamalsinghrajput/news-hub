@@ -10,7 +10,7 @@ import { MarkAsRead } from "../utils/MarkAsRead/MarkAsRead";
 import { MarkAsSaved } from "../utils/MarkAsSaved/MarkAsSaved";
 import ShareButton from "../utils/ShareButton/ShareButton";
 
-const NewsCard = ({ title, image, summary, userId, sentiment, url }) => {
+const NewsCard = ({ title, image, summary, sentiment, url }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getSentimentIcon = (sentiment) => {
@@ -67,8 +67,8 @@ const NewsCard = ({ title, image, summary, userId, sentiment, url }) => {
               Show Summary
             </button>
             <div className="flex items-center space-x-4 mt-4">
-              <MarkAsRead articleId={url} userId={userId} />
-              <MarkAsSaved articleId={url} userId={userId} />
+              <MarkAsRead articleUrl={url} />
+              <MarkAsSaved articleUrl={url} />
               <ShareButton url={url} />
             </div>
           </div>

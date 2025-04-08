@@ -5,49 +5,31 @@ import Preferences from "../components/preference/Preferences";
 import { Routes, Route } from "react-router-dom";
 import { Register } from "../components/Register/Register";
 
-export const AppRoutes = ({
-  preferences,
-  userId,
-  setArticles,
-  articles,
-  appLoading,
-  setAppLoading,
-  setUserPreferences,
-}) => {
+const RoutesArray = [
+  {
+    href: "/",
+    component: <News />,
+  },
+  {
+    href: "/saved-articles",
+    component: <SavedArticles />,
+  },
+  {
+    href: "/preferences",
+    component: <Preferences />,
+  },
+  {
+    href: "/register",
+    component: <Register />,
+  },
+];
+
+export const AppRoutes = () => {
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <News
-            preferences={preferences}
-            userId={userId}
-            setArticles={setArticles}
-            articles={articles}
-            setAppLoading={setAppLoading}
-            appLoading={appLoading}
-          />
-        }
-      />
-
-      <Route
-        path="/saved-articles"
-        element={<SavedArticles userId={userId} />}
-      />
-
-      <Route
-        path="/preferences"
-        element={
-          <Preferences
-            userPreferences={preferences}
-            userId={userId}
-            setUserPreferences={setUserPreferences}
-            appLoading={appLoading}
-          />
-        }
-      />
-
-      <Route path="/register" element={<Register />} />
+      {RoutesArray.map(({ href, component }, key) => {
+        return <Route path={href} element={component} key={key} />;
+      })}
     </Routes>
   );
 };

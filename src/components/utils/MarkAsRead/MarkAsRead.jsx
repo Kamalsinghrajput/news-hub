@@ -1,49 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { CheckCircle, Loader2 } from "lucide-react";
-import { API_BASE_URL } from "../../../constants/constants";
+import { apolloClient } from "../../../lib/nhost";
+import { useMutation } from "@apollo/client";
+import { IS_READ, MARK_AS_READ } from "../../../graphql/queries/queries";
+import { useUserId } from "@nhost/react";
 
-export const MarkAsRead = ({ userId, articleId }) => {
+export const MarkAsRead = ({ articleUrl }) => {
   const [isRead, setIsRead] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const checkIfRead = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/article-is-read?userId=${userId}&articleId=${articleId} `
-      );
-      const data = await response.json();
-
-      //TODO: clean mess up from n8n
-      const isRead = data?.["true"]?.[0].exists || data[0].exists;
-
-      setIsRead(isRead);
-    } catch (error) {
-      console.error("Error checking read status:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    checkIfRead();
-  }, [userId, articleId]);
+  const userId = useUserId();
+  const [insertIsRead] = useMutation(MARK_AS_READ);
 
   const toggleReadStatus = async () => {
     try {
       setIsLoading(true);
-      const endpoint = isRead ? "/unmark-article-read" : "/mark-article-read";
-      const method = isRead ? "DELETE" : "POST";
-      console.log(method);
-      await fetch(
-        `${API_BASE_URL}${endpoint}?userId=${userId}&articleId=${articleId}`,
-        {
-          method,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
 
-      setIsRead((prev) => !prev);
+      const { data } = await insertIsRead({
+        variables: {
+          userId: "b56bfd3b-a841-438c-93cc-5c8f7162d26c",
+          articleUrl: "https://example.com/article-123",
+        },
+      });
+      console.log("Marked as read:", data);
     } catch (error) {
       console.error(
         `Error ${isRead ? "unmarking" : "marking"} article as read:`,
@@ -53,6 +31,23 @@ export const MarkAsRead = ({ userId, articleId }) => {
       setIsLoading(false);
     }
   };
+
+  const checkIsRead = async () => {
+    try {
+      const { data } = await apolloClient.query({
+        query: IS_READ,
+        variables: { userId, articleUrl },
+      });
+
+      if (data.is_read.length > 0) setIsRead(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    checkIsRead();
+  }, []);
 
   return (
     <button

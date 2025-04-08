@@ -2,7 +2,6 @@ import { useSignUpEmailPassword } from "@nhost/react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { INSERT_PREFERENCES } from "../../../graphql/mutations/preferences";
 import { nhost } from "../../../lib/nhost";
 
 function SignUp({ setIsSignUp }) {
@@ -14,17 +13,20 @@ function SignUp({ setIsSignUp }) {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+
     const { error, user } = await signUpEmailPassword(email, password);
+    console.log(user);
+
     if (error) {
       toast.error(error.message);
     } else {
       toast.success("Verification email sent! Please verify your email.");
-      await nhost.graphql.request(INSERT_PREFERENCES, {
-        userId: user.id,
-        category: [],
-      });
+      // await nhost.graphql.request(INSERT_PREFERENCES, {
+      //   userId: user.id,
+      //   category: [],
+      // });
 
-      setTimeout(() => navigate("/signin"), 3000);
+      // setTimeout(() => navigate("/signin"), 3000);
     }
   };
 

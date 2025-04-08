@@ -11,8 +11,8 @@ import {
   Loader2,
 } from "lucide-react";
 import { useState } from "react";
-import { API_BASE_URL } from "../../constants/constants";
-import { useNavigate } from "react-router-dom";
+import { usePreferences } from "../../custom-hooks/usePreferences";
+import Loader from "../utils/loader/Loader";
 
 const availableCategories = [
   "General",
@@ -38,16 +38,13 @@ const categoryIcons = {
   Health: Heart,
 };
 
-const Preferences = ({
-  userId,
-  userPreferences,
-  setUserPreferences,
-  appLoading,
-}) => {
+const Preferences = ({ appLoading }) => {
+  const { preferences, loading } = usePreferences();
+
   const [selectedPreferences, setSelectedPreferences] = useState(
-    userPreferences || []
+    preferences || []
   );
-  const navigate = useNavigate();
+
   const togglePreference = (category) => {
     setSelectedPreferences((prev) =>
       prev.includes(category)
@@ -56,18 +53,22 @@ const Preferences = ({
     );
   };
 
-  const savePreferences = async () => {
-    try {
-      setUserPreferences(selectedPreferences);
-      await fetch(`${API_BASE_URL}/store-user-preferences?userId=${userId}`, {
-        method: "POST",
-        body: JSON.stringify(selectedPreferences),
-      });
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const savePreferences = async () => {
+  //   try {
+  //     await fetch(`${API_BASE_URL}/store-user-preferences?userId=${user?.id}`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(selectedPreferences),
+  //     });
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  if (loading) return <Loader />;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black p-8">
@@ -79,13 +80,14 @@ const Preferences = ({
         <div className="flex items-center justify-center flex-wrap max-w-[671px] gap-4 border-1 border-white p-4 rounded-[8px]">
           {availableCategories.map((category) => {
             const Icon = categoryIcons[category];
-            const isSelected = selectedPreferences.includes(category);
+            console.log(selectedPreferences, category);
+            const isSelected = selectedPreferences?.includes(category);
 
             return (
               <button
                 key={category}
                 onClick={() => togglePreference(category)}
-                className={` cursor-pointer
+                className={`cursor-pointer
                   w-[200px] h-[80px] rounded-lg p-4 flex flex-col items-center justify-center gap-2
                   transition-all duration-200 hover:scale-105
                   ${
@@ -107,14 +109,15 @@ const Preferences = ({
 
         <div className="mt-8 text-center text-gray-600">
           Selected preferences:{" "}
-          {selectedPreferences.length > 0
-            ? selectedPreferences.join(", ")
+          {selectedPreferences?.length > 0
+            ? selectedPreferences?.join(", ")
             : "None"}
         </div>
-        <div className="flex items-center justify-center mt-8 ">
+        <div className="flex items-center justify-center mt-8">
           <button
             className="bg-white rounded-[8px] p-3 cursor-pointer"
-            onClick={savePreferences}
+            onClick={() => {}}
+            disabled={appLoading}
           >
             {appLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />

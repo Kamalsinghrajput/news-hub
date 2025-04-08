@@ -13,6 +13,7 @@ function SignIn({ setIsSignUp }) {
     e.preventDefault();
     try {
       const response = await signInEmailPassword(email, password);
+
       if (response) {
         navigate("/");
         // window.location.replace("/");

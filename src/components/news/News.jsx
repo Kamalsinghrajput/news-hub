@@ -1,32 +1,17 @@
 import NewsCard from "./NewsCard";
-import { useEffect } from "react";
-import Loader from "../utils/loader/Loader.jsx";
+import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../constants/constants.js";
+import { usePreferences } from "../../custom-hooks/usePreferences.jsx";
+import Loader from "../utils/loader/Loader.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { hideLoader, showLoader } from "../../store/appLoaderSlice.js";
 
-const News = ({
-  preferences,
-  userId,
-  setArticles,
-  articles,
-  setAppLoading,
-  appLoading,
-}) => {
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    if (articles.length > 0) return;
-
-    fetchNewsAsPreference(signal);
-  }, [preferences]);
-
-  useEffect(() => {
-    if (articles.length > 0 && articles.length <= 5) {
-      setAppLoading(false);
-    }
-  }, [articles]);
-
+const News = () => {
   const baseUrl = API_BASE_URL;
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.appLoader.isLoading);
+  const [articles, setArticles] = useState([]);
+  const { preferences, loading } = usePreferences() ?? {};
 
   const fetchNews = async (category, signal) => {
     try {
@@ -49,34 +34,40 @@ const News = ({
     }
   };
 
-  // Helper function to add delay
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const fetchNewsAsPreference = async () => {
-    setAppLoading(true);
-    let loaderTurnedOff = false;
+    dispatch(showLoader());
 
     if (!preferences) {
-      setAppLoading(false);
+      dispatch(hideLoader());
       return;
     }
     for (const category of preferences) {
       await fetchNews(category);
-      if (!loaderTurnedOff) {
-        setAppLoading(false);
-        loaderTurnedOff = true;
-      }
-      await delay(500); // Wait 500ms before next request
+      await delay(500);
     }
 
-    setAppLoading(false);
+    dispatch(hideLoader());
   };
 
-  if (appLoading) return <Loader />;
+  useEffect(() => {
+    if (preferences?.length > 0) {
+      fetchNewsAsPreference();
+    }
+  }, [preferences]);
+
+  useEffect(() => {
+    if (articles.length > 0 && articles.length <= 5) {
+      dispatch(hideLoader());
+    }
+  }, [articles]);
+
+  if (isLoading || loading) return <Loader />;
 
   return (
     <div className="col-span-9">
-      {preferences && (
+      {preferences && preferences?.length > 0 && (
         <div className="text-white">
           <h1 className="text-2xl font-bold my-4">
             As per your selected preferences...
@@ -101,7 +92,6 @@ const News = ({
             {...article}
             sentiment={article.sentiment}
             key={article.url}
-            userId={userId}
           />
         ))}
       </div>
